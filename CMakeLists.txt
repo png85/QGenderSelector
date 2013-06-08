@@ -36,3 +36,7 @@ add_library(QGenderSelector ${QGenderSelector_MOC_SRCS}
   ${QGenderSelector_QRC_SRCS}
   ${QGenderSelector_SRCS}
 )
+
+add_executable(QGenderSelector-demo demo.cc)
+target_link_libraries(QGenderSelector-demo QGenderSelector)
+target_link_libraries(QGenderSelector-demo ${QT_LIBRARIES})
