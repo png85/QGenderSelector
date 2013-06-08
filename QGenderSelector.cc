@@ -10,10 +10,12 @@ QGenderSelector::QGenderSelector(QWidget *parent) :
     QFrame(parent),
     m_orientation(Qt::Horizontal),
     m_layout(nullptr),
-    m_radioMale(nullptr), m_radioFemale(nullptr), m_radioOther(nullptr)
+    m_radioMale(nullptr), m_radioFemale(nullptr), m_radioOther(nullptr),
+    m_selectedGender(Other)
 {
     qRegisterMetaType<Gender>("QGenderSelector::Gender");
     setupUi();
+    setSelectedGender(m_selectedGender);
 }
 
 
