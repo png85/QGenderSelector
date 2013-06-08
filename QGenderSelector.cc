@@ -28,7 +28,6 @@ void QGenderSelector::setOrientation(Qt::Orientation o) {
 
 void QGenderSelector::setupUi() {
     QLayout* layoutBackup = m_layout;
-    QButtonGroup* groupBackup = m_buttonGroup;
     QList<QRadioButton*> radioBackup = QList<QRadioButton*>() << m_radioMale << m_radioFemale << m_radioOther;
 
     try {
@@ -86,9 +85,6 @@ void QGenderSelector::setupUi() {
 
     if (layoutBackup != nullptr)
         delete layoutBackup;
-
-    if (groupBackup != nullptr)
-        delete groupBackup;
 
     foreach (QRadioButton* button, radioBackup)
         if (button != nullptr)
