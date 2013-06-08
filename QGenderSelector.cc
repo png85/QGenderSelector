@@ -45,7 +45,8 @@ void QGenderSelector::setupUi() {
     }
 
     catch (std::bad_alloc& ex) {
-        qCritical() << "Caught exception when trying to create new QBoxLayout in" << Q_FUNC_INFO << ":" << ex.what();
+        QString msg = tr("Failed to allocate memory for new QBoxLayout in %1: %2").arg(Q_FUNC_INFO, ex.what());
+        qCritical() << msg;
         throw;
     }
 
@@ -54,7 +55,8 @@ void QGenderSelector::setupUi() {
     }
 
     catch (std::bad_alloc& ex) {
-        qCritical() << "Caught exception when trying to create new QButtonGroup in " << Q_FUNC_INFO << ":" << ex.what();
+        QString msg = tr("Failed to allocate memory for new QButtonGroup in %1: %2").arg(Q_FUNC_INFO, ex.what());
+        qCritical() << msg;
         throw;
     }
 
@@ -62,26 +64,27 @@ void QGenderSelector::setupUi() {
     try {
         m_radioMale = new QRadioButton(tr("Male"), this);
         m_radioMale->setIcon(QIcon(":/icons/genders/male.png"));
+        m_layout->addWidget(m_radioMale);
+        m_buttonGroup->addButton(m_radioMale, static_cast<int>(Male));
 
         m_radioFemale = new QRadioButton(tr("Female"), this);
         m_radioFemale->setIcon(QIcon(":/icons/genders/female.png"));
+        m_layout->addWidget(m_radioFemale);
+        m_buttonGroup->addButton(m_radioFemale, static_cast<int>(Female));
 
         m_radioOther = new QRadioButton(tr("Other"), this);
         m_radioOther->setIcon(QIcon(":/icons/genders/other.png"));
+        m_layout->addWidget(m_radioOther);
+        m_buttonGroup->addButton(m_radioOther, static_cast<int>(Other));
     }
 
     catch (std::bad_alloc& ex) {
-        qCritical() << "Caught exception when trying to create new QRadioButton in " << Q_FUNC_INFO << ":" << ex.what();
+        QString msg = tr("Failed to allocate memory for new QRadioButton in %1: %2").arg(Q_FUNC_INFO, ex.what());
+        qCritical() << msg;
         throw;
     }
 
-    radioButtons << m_radioMale << m_radioFemale << m_radioOther;
-    foreach (QRadioButton* button, radioButtons) {
-        m_layout->addWidget(button);
-        m_buttonGroup->addButton(button);
-    }
-
-    connect(m_buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(buttonGroup_buttonClicked(QAbstractButton*)));
+    connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonGroup_buttonClicked(int)));
 
     QFrame::setLayout(m_layout);
 
@@ -94,15 +97,8 @@ void QGenderSelector::setupUi() {
 }
 
 
-void QGenderSelector::buttonGroup_buttonClicked(QAbstractButton* button) {
-    if (button == m_radioMale) {
-        m_selectedGender = Male;
-    } else if (button == m_radioFemale) {
-        m_selectedGender = Female;
-    } else {
-        m_selectedGender = Other;
-    }
-
+void QGenderSelector::buttonGroup_buttonClicked(int id) {
+    m_selectedGender = static_cast<Gender>(id);
     emit selectedGenderChanged(m_selectedGender);
     emit selectedGenderChanged(genderToDicomVR(m_selectedGender));
 }
