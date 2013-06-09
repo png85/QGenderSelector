@@ -28,7 +28,7 @@ class QGenderSelector : public QFrame
      * @see getSelectedGender
      * @see setSelectedGender
      */
-    Q_PROPERTY(Gender selectedGender READ getSelectedGender WRITE setSelectedGender)
+    Q_PROPERTY(QGenderSelector::Gender selectedGender READ getSelectedGender WRITE setSelectedGender)
 
 public:
     explicit QGenderSelector(QWidget *parent = 0);

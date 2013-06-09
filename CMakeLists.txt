@@ -49,8 +49,9 @@ endif(WIN32)
 set(libQGenderSelectorPlugin_MOC_HDRS QGenderSelectorDesignerFactory.h)
 set(libQGenderSelectorPlugin_SRCS QGenderSelectorDesignerFactory.cc)
 qt4_wrap_cpp(libQGenderSelectorPlugin_MOC_SRCS ${libQGenderSelectorPlugin_MOC_HDRS})
-add_library(QGenderSelectorPlugin SHARED ${QGenderSelector_MOC_SRCS} ${QGenderSelector_SRCS}
-                                         ${libQGenderSelectorPlugin_MOC_SRCS} ${libQGenderSelectorPlugin_SRCS})
+add_library(QGenderSelectorPlugin SHARED ${QGenderSelector_MOC_SRCS}
+  ${QGenderSelector_SRCS} ${QGenderSelector_QRC_SRCS}
+  ${libQGenderSelectorPlugin_MOC_SRCS} ${libQGenderSelectorPlugin_SRCS})
 target_link_libraries(QGenderSelectorPlugin ${QT_LIBRARIES})
 install(TARGETS QGenderSelectorPlugin DESTINATION ${QT_PLUGINS_DIR}/designer)
 
