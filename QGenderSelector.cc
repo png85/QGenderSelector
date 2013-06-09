@@ -8,7 +8,6 @@
 
 QGenderSelector::QGenderSelector(QWidget *parent) :
     QFrame(parent),
-    m_orientation(Qt::Horizontal),
     m_layout(nullptr),
     m_radioMale(nullptr), m_radioFemale(nullptr), m_radioOther(nullptr),
     m_selectedGender(Other)
@@ -19,29 +18,9 @@ QGenderSelector::QGenderSelector(QWidget *parent) :
 }
 
 
-void QGenderSelector::setOrientation(Qt::Orientation o) {
-    if (m_orientation == o)
-        return;
-
-    setupUi();
-    m_orientation = o;
-}
-
-
 void QGenderSelector::setupUi() {
-    QLayout* layoutBackup = m_layout;
-    QList<QRadioButton*> radioBackup = QList<QRadioButton*>() << m_radioMale << m_radioFemale << m_radioOther;
-
     try {
-        switch (m_orientation) {
-        case Qt::Horizontal:
             m_layout = new QHBoxLayout(this);
-            break;
-
-        case Qt::Vertical:
-            m_layout = new QVBoxLayout(this);
-            break;
-        }
     }
 
     catch (std::bad_alloc& ex) {
@@ -87,13 +66,6 @@ void QGenderSelector::setupUi() {
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonGroup_buttonClicked(int)));
 
     QFrame::setLayout(m_layout);
-
-    if (layoutBackup != nullptr)
-        delete layoutBackup;
-
-    foreach (QRadioButton* button, radioBackup)
-        if (button != nullptr)
-            delete button;
 }
 
 

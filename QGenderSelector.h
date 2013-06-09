@@ -20,8 +20,6 @@ class QGenderSelector : public QFrame
 {
     Q_OBJECT
 
-    Q_PROPERTY(Qt::Orientation orientation READ getOrientation WRITE setOrientation)
-
     /**
      * @brief Currently selected gender
      *
@@ -34,8 +32,6 @@ class QGenderSelector : public QFrame
 
 public:
     explicit QGenderSelector(QWidget *parent = 0);
-    
-    Qt::Orientation getOrientation() const { return m_orientation; }
 
     /**
      * @brief Supported genders
@@ -75,8 +71,6 @@ public:
     }
 
 private:
-    Qt::Orientation m_orientation;
-
     QBoxLayout* m_layout;
 
     QRadioButton* m_radioMale;
@@ -115,7 +109,6 @@ signals:
     void selectedGenderChanged(QString genderVR);
 
 public slots:
-    void setOrientation(Qt::Orientation o);
     void setSelectedGender(QGenderSelector::Gender g);
 
 
