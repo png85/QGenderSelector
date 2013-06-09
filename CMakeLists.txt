@@ -26,6 +26,8 @@ find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+#
+# Static library for QGenderSelector
 set(QGenderSelector_MOC_HDRS QGenderSelector.h)
 qt4_wrap_cpp(QGenderSelector_MOC_SRCS ${QGenderSelector_MOC_HDRS})
 set(QGenderSelector_SRCS QGenderSelector.cc)
@@ -40,22 +42,29 @@ add_library(QGenderSelector ${QGenderSelector_MOC_SRCS}
 install(TARGETS QGenderSelector DESTINATION lib/)
 install(FILES ${QGenderSelector_MOC_HDRS} DESTINATION include/)
 
-add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_PLUGIN)
-add_definitions(-DQT_SHARED)
-if(WIN32)
-  add_definitions(-DQT_DLL)
-endif(WIN32)
-set(libQGenderSelectorPlugin_MOC_HDRS QGenderSelectorDesignerFactory.h)
-set(libQGenderSelectorPlugin_SRCS QGenderSelectorDesignerFactory.cc)
-qt4_wrap_cpp(libQGenderSelectorPlugin_MOC_SRCS ${libQGenderSelectorPlugin_MOC_HDRS})
-add_library(QGenderSelectorPlugin SHARED ${QGenderSelector_MOC_SRCS}
-  ${QGenderSelector_SRCS} ${QGenderSelector_QRC_SRCS}
-  ${libQGenderSelectorPlugin_MOC_SRCS} ${libQGenderSelectorPlugin_SRCS})
-target_link_libraries(QGenderSelectorPlugin ${QT_LIBRARIES})
-install(TARGETS QGenderSelectorPlugin DESTINATION ${QT_PLUGINS_DIR}/designer)
+#
+# Qt designer plugin
+option(QGENDERSELECTOR_WITH_DESIGNER_PLUGIN "Build Plugin for Qt Designer" ON)
+if(QGENDERSELECTOR_WITH_DESIGNER_PLUGIN)
+  add_definitions(${QT_DEFINITIONS})
+  add_definitions(-DQT_PLUGIN)
+  add_definitions(-DQT_SHARED)
+  if(WIN32)
+    add_definitions(-DQT_DLL)
+  endif(WIN32)
+  set(libQGenderSelectorPlugin_MOC_HDRS QGenderSelectorDesignerFactory.h)
+  set(libQGenderSelectorPlugin_SRCS QGenderSelectorDesignerFactory.cc)
+  qt4_wrap_cpp(libQGenderSelectorPlugin_MOC_SRCS ${libQGenderSelectorPlugin_MOC_HDRS})
+  add_library(QGenderSelectorPlugin SHARED ${QGenderSelector_MOC_SRCS}
+    ${QGenderSelector_SRCS} ${QGenderSelector_QRC_SRCS}
+    ${libQGenderSelectorPlugin_MOC_SRCS} ${libQGenderSelectorPlugin_SRCS})
+  target_link_libraries(QGenderSelectorPlugin ${QT_LIBRARIES})
+  install(TARGETS QGenderSelectorPlugin DESTINATION ${QT_PLUGINS_DIR}/designer)
+endif(QGENDERSELECTOR_WITH_DESIGNER_PLUGIN)
 
 
+#
+# Simple demo executable
 add_executable(QGenderSelector-demo demo.cc)
 target_link_libraries(QGenderSelector-demo QGenderSelector)
 target_link_libraries(QGenderSelector-demo ${QT_LIBRARIES})
