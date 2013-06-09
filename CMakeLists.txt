@@ -37,6 +37,24 @@ add_library(QGenderSelector ${QGenderSelector_MOC_SRCS}
   ${QGenderSelector_SRCS}
 )
 
+install(TARGETS QGenderSelector DESTINATION lib/)
+install(FILES ${QGenderSelector_MOC_HDRS} DESTINATION include/)
+
+add_definitions(${QT_DEFINITIONS})
+add_definitions(-DQT_PLUGIN)
+add_definitions(-DQT_SHARED)
+if(WIN32)
+  add_definitions(-DQT_DLL)
+endif(WIN32)
+set(libQGenderSelectorPlugin_MOC_HDRS QGenderSelectorDesignerFactory.h)
+set(libQGenderSelectorPlugin_SRCS QGenderSelectorDesignerFactory.cc)
+qt4_wrap_cpp(libQGenderSelectorPlugin_MOC_SRCS ${libQGenderSelectorPlugin_MOC_HDRS})
+add_library(QGenderSelectorPlugin SHARED ${QGenderSelector_MOC_SRCS} ${QGenderSelector_SRCS}
+                                         ${libQGenderSelectorPlugin_MOC_SRCS} ${libQGenderSelectorPlugin_SRCS})
+target_link_libraries(QGenderSelectorPlugin ${QT_LIBRARIES})
+install(TARGETS QGenderSelectorPlugin DESTINATION ${QT_PLUGINS_DIR}/designer)
+
+
 add_executable(QGenderSelector-demo demo.cc)
 target_link_libraries(QGenderSelector-demo QGenderSelector)
 target_link_libraries(QGenderSelector-demo ${QT_LIBRARIES})
