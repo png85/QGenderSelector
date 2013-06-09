@@ -2,6 +2,13 @@ project(QGenderSelector)
 cmake_minimum_required(VERSION 2.6.6)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+set(CPACK_PACKAGE_VERSION_MAJOR 1)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_DESCRIPTION "Qt gender selection widget")
+set(CPACK_PACKAGE_VENDOR "#das-system Networks")
+include(CPack)
+
 include(CheckCXX11Features)
 foreach(flag ${CXX11_FEATURE_LIST})
   add_definitions(-D${flag})
@@ -20,27 +27,50 @@ if(MSVC)
   list(REMOVE_DUPLICATES CMAKE_CXX_FLAGS_DEBUG)
 endif(MSVC)
 
+option(BUILD_STATIC_LIBRARIES "Build as static library instead of shared library/DLL" OFF)
+
 include(GenerateExportHeader)
+add_compiler_export_flags(QGenderSelector_EXPORT_FLAGS)
+message(STATUS "Export-specific compiler flags: ${QGenderSelector_EXPORT_FLAGS}")
 
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+
 #
-# Static library for QGenderSelector
+# Library for QGenderSelector
 set(QGenderSelector_MOC_HDRS QGenderSelector.h)
 qt4_wrap_cpp(QGenderSelector_MOC_SRCS ${QGenderSelector_MOC_HDRS})
 set(QGenderSelector_SRCS QGenderSelector.cc)
 set(QGenderSelector_QRC_HDRS QGenderSelector.qrc)
 qt4_add_resources(QGenderSelector_QRC_SRCS ${QGenderSelector_QRC_HDRS})
+if(BUILD_STATIC_LIBRARIES)
+  # Build static library
+  add_library(QGenderSelector STATIC ${QGenderSelector_MOC_SRCS}
+    ${QGenderSelector_QRC_SRCS}
+    ${QGenderSelector_SRCS})
+else(BUILD_STATIC_LIBRARIES)
+  # Build shared library/DLL
+  add_library(QGenderSelector SHARED ${QGenderSelector_MOC_SRCS}
+    ${QGenderSelector_QRC_SRCS}
+    ${QGenderSelector_SRCS})
+  set_target_properties(QGenderSelector PROPERTIES
+    SONAME QGenderSelector
+    SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR})
+endif(BUILD_STATIC_LIBRARIES)
 
-add_library(QGenderSelector ${QGenderSelector_MOC_SRCS}
-  ${QGenderSelector_QRC_SRCS}
-  ${QGenderSelector_SRCS}
-)
+# Auto-generate export header for DLLs
+generate_export_header(QGenderSelector
+  BASE_NAME QGenderSelector
+  EXPORT_MACRO_NAME QGenderSelector_EXPORT
+  EXPORT_FILE_NAME QGenderSelector_export.h)
 
+# Install rules for all of the above
 install(TARGETS QGenderSelector DESTINATION lib/)
 install(FILES ${QGenderSelector_MOC_HDRS} DESTINATION include/)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QGenderSelector_export.h DESTINATION include/)
+
 
 #
 # Qt designer plugin

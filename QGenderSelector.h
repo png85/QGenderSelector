@@ -6,6 +6,8 @@
 #include <QButtonGroup>
 #include <QRadioButton>
 
+#include "QGenderSelector_export.h"
+
 /**
  * @brief Gender selection widget
  *
@@ -16,7 +18,7 @@
  *
  * @version 1.0 Initial implementation
  */
-class QGenderSelector : public QFrame
+class QGenderSelector_EXPORT QGenderSelector : public QFrame
 {
     Q_OBJECT
 
