@@ -5,6 +5,13 @@
 #include <QtDeclarative/QDeclarativeItem>
 #include <QtDesigner/QDesignerCustomWidgetInterface>
 
+/**
+ * @brief Qt Designer plugin for \a QGenderSelector
+ *
+ * @author Peter Hille (png!das-system) <peter@das-system-networks.de>
+ *
+ * @version 1.0 Initial implementation
+ */
 class QGenderSelectorDesignerFactory : public QObject,
         public QDesignerCustomWidgetInterface
 {
