@@ -6,21 +6,23 @@
 
 #include "QGenderSelector.h"
 
-QGenderSelector::QGenderSelector(QWidget *parent) :
-    QFrame(parent),
-    m_layout(nullptr),
-    m_radioMale(nullptr), m_radioFemale(nullptr), m_radioOther(nullptr),
-    m_selectedGender(Other)
+QGenderSelector::QGenderSelector(QWidget* parent)
+    : QFrame(parent)
+    , m_layout(nullptr)
+    , m_radioMale(nullptr)
+    , m_radioFemale(nullptr)
+    , m_radioOther(nullptr)
+    , m_selectedGender(Other)
 {
     qRegisterMetaType<Gender>("QGenderSelector::Gender");
     setupUi();
     setSelectedGender(m_selectedGender);
 }
 
-
-void QGenderSelector::setupUi() {
+void QGenderSelector::setupUi()
+{
     try {
-            m_layout = new QHBoxLayout(this);
+        m_layout = new QHBoxLayout(this);
     }
 
     catch (std::bad_alloc& ex) {
@@ -68,15 +70,15 @@ void QGenderSelector::setupUi() {
     QFrame::setLayout(m_layout);
 }
 
-
-void QGenderSelector::buttonGroup_buttonClicked(int id) {
+void QGenderSelector::buttonGroup_buttonClicked(int id)
+{
     m_selectedGender = static_cast<Gender>(id);
     emit selectedGenderChanged(m_selectedGender);
     emit selectedGenderChanged(genderToDicomVR(m_selectedGender));
 }
 
-
-void QGenderSelector::setSelectedGender(QGenderSelector::Gender g) {
+void QGenderSelector::setSelectedGender(QGenderSelector::Gender g)
+{
     m_selectedGender = g;
     switch (g) {
     case Male:

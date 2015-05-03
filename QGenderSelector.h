@@ -18,8 +18,7 @@
  *
  * @version 1.0 Initial implementation
  */
-class QGenderSelector_EXPORT QGenderSelector : public QFrame
-{
+class QGenderSelector_EXPORT QGenderSelector : public QFrame {
     Q_OBJECT
 
     /**
@@ -33,13 +32,15 @@ class QGenderSelector_EXPORT QGenderSelector : public QFrame
     Q_PROPERTY(QGenderSelector::Gender selectedGender READ getSelectedGender WRITE setSelectedGender)
 
 public:
-    explicit QGenderSelector(QWidget *parent = 0);
+    explicit QGenderSelector(QWidget* parent = 0);
 
     /**
      * @brief Supported genders
      */
     enum Gender {
-        Male=0x0, Female=0x1, Other=0x2
+        Male = 0x0,
+        Female = 0x1,
+        Other = 0x2
     };
 
     /**
@@ -58,7 +59,8 @@ public:
      * @param g \a Gender that shall be converted to a VR string
      * @return DICOM VR string for the given \a Gender value
      */
-    static QString genderToDicomVR(Gender g) {
+    static QString genderToDicomVR(Gender g)
+    {
         switch (g) {
         case Male:
             return "M";
@@ -112,7 +114,6 @@ signals:
 
 public slots:
     void setSelectedGender(QGenderSelector::Gender g);
-
 
 private slots:
     void buttonGroup_buttonClicked(int);
