@@ -9,10 +9,17 @@ int main(int argc, char** argv)
 {
     QApplication a(argc, argv);
 
-    Q_INIT_RESOURCE(QGenderSelector);
+    QGenderSelector_initResources();
 
-    QGenderSelector* g = new QGenderSelector();
-    g->show();
+    try {
+        std::unique_ptr<QGenderSelector> g(new QGenderSelector());
+        g->show();
 
-    return a.exec();
+        return a.exec();
+    }
+
+    catch (std::bad_alloc& ex) {
+        std::cerr << "Failed to allocate memory for QGenderSelector: " << ex.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 }
