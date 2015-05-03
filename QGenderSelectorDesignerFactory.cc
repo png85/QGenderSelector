@@ -20,7 +20,7 @@
 QGenderSelectorDesignerFactory::QGenderSelectorDesignerFactory(QObject* parent)
     : QObject(parent)
 {
-    Q_INIT_RESOURCE(QGenderSelector);
+    QGenderSelector_initResources();
     qRegisterMetaType<QGenderSelector::Gender>("QGenderSelector::Gender");
 }
 

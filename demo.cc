@@ -1,6 +1,9 @@
+#include "QGenderSelector.h"
+
+#include <iostream>
+#include <memory>
 #include <QApplication>
 
-#include "QGenderSelector.h"
 
 int main(int argc, char** argv)
 {

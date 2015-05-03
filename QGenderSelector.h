@@ -119,4 +119,6 @@ private slots:
     void buttonGroup_buttonClicked(int);
 };
 
+void QGenderSelector_EXPORT QGenderSelector_initResources(void);
+
 #endif // QGENDERSELECTOR_H

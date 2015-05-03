@@ -101,3 +101,9 @@ void QGenderSelector::setSelectedGender(QGenderSelector::Gender g)
         break;
     }
 }
+
+
+void QGenderSelector_initResources()
+{
+    Q_INIT_RESOURCE(QGenderSelector);
+}
