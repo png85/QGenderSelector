@@ -6,7 +6,7 @@
 #include <QButtonGroup>
 #include <QRadioButton>
 
-#include "QGenderSelector_export.h"
+#include <QGenderSelector_Export.h>
 
 /**
  * @brief Gender selection widget
