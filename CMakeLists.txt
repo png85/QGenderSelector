@@ -22,6 +22,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         message(WARNING "Failed to determine C++11 flag for GCC :-(")
     endif()
 endif(CMAKE_COMPILER_IS_GNUCXX)
+include(CheckCXX11Features)
 
 option(QGenderSelector_BUILD_AS_SUBMODULE "Build QGenderSelector as git submodule?" OFF)
 option(QGenderSelector_BUILD_SHARED_LIBS "Build QGenderSelector as shared library?" ON)
