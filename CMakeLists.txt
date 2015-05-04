@@ -93,7 +93,7 @@ if(QGenderSelector_WITH_DESIGNER_PLUGIN)
   add_library(QGenderSelectorPlugin SHARED ${libQGenderSelectorPlugin_MOC_SRCS} ${libQGenderSelectorPlugin_SRCS})
   target_link_libraries(QGenderSelectorPlugin QGenderSelector ${QT_LIBRARIES})
   if(QGenderSelector_INSTALL_DESIGNER_PLUGIN)
-    install(TARGETS QGenderSelectrPlugin DESTINATION ${QT_DIR}/plugins)
+    install(TARGETS QGenderSelectorPlugin DESTINATION ${QT_DIR}/plugins)
   else(QGenderSelector_INSTALL_DESIGNER_PLUGIN)
     install(TARGETS QGenderSelectorPlugin ARCHIVE DESTINATION lib
                                           LIBRARY DESTINATION lib
