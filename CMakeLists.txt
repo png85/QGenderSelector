@@ -1,5 +1,5 @@
 project(QGenderSelector)
-cmake_minimum_required(VERSION 2.6.6)
+cmake_minimum_required(VERSION 3.0)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 #
@@ -27,13 +27,18 @@ include(CheckCXX11Features)
 option(QGenderSelector_BUILD_AS_SUBMODULE "Build QGenderSelector as git submodule?" OFF)
 option(QGenderSelector_BUILD_SHARED_LIBS "Build QGenderSelector as shared library?" ON)
 option(QGenderSelector_WITH_DESIGNER_PLUGIN "Build plugin to use QGenderSelector with Qt Designer?" ON)
-option(QGenderSelector_INSTALL_DESIGNER_PLUGIN "Install Qt Designer plugin to Qt plugin directory?" OFF)
 option(QGenderSelector_WITH_EXAMPLE "Build small example program for QGenderSelector?" ON)
+option(QGenderSelector_ENABLE_QT4 "Build QGenderSelector for Qt4?" ON)
+option(QGenderSelector_ENABLE_QT5 "Build QGenderSelector for Qt5?" ON)
+
+set(QGenderSelector_VERSION_MAJOR 1)
+set(QGenderSelector_VERSION_MINOR 1)
+set(QGenderSelector_VERSION_PATCH 0)
 
 if(NOT QGenderSelector_BUILD_AS_SUBMODULE)
-    set(CPACK_PACKAGE_VERSION_MAJOR 1)
-    set(CPACK_PACKAGE_VERSION_MINOR 0)
-    set(CPACK_PACKAGE_VERSION_PATCH 1)
+    set(CPACK_PACKAGE_VERSION_MAJOR ${QGenderSelector_VERSION_MAJOR})
+    set(CPACK_PACKAGE_VERSION_MINOR ${QGenderSelector_VERSION_MINOR})
+    set(CPACK_PACKAGE_VERSION_PATCH ${QGenderSelector_VERSION_PATCH})
     set(CPACK_PACKAGE_DESCRIPTION "Qt gender selection widget")
     set(CPACK_PACKAGE_VENDOR "#das-system Networks")
     if(WIN32)
@@ -48,64 +53,22 @@ else(QGenderSelector_BUILD_SHARED_LIBS)
     set(LIB_TYPE STATIC)
 endif(QGenderSelector_BUILD_SHARED_LIBS)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include(GenerateExportHeader)
 
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 
-#
-# Library for QGenderSelector
-set(QGenderSelector_MOC_HDRS QGenderSelector.h)
-qt4_wrap_cpp(QGenderSelector_MOC_SRCS ${QGenderSelector_MOC_HDRS})
-set(QGenderSelector_SRCS QGenderSelector.cc)
-set(QGenderSelector_QRC_HDRS QGenderSelector.qrc)
-qt4_add_resources(QGenderSelector_QRC_SRCS ${QGenderSelector_QRC_HDRS})
-add_library(QGenderSelector ${LIB_TYPE} ${QGenderSelector_SRCS} ${QGenderSelector_MOC_SRCS} ${QGenderSelector_QRC_SRCS})
-target_link_libraries(QGenderSelector ${QT_LIBRARIES})
-generate_export_header(QGenderSelector BASE_NAME QGenderSelector
-                                       EXPORT_MACRO_NAME QGenderSelector_EXPORT
-                                       EXPORT_FILE_NAME QGenderSelector_Export.h
-                                       STATIC_DEFINE QGenderSelector_BUILT_AS_STATIC)
-if(UNIX AND QGenderSelector_BUILD_SHARED_LIBS)
-    set_target_properties(QGenderSelector PROPERTIES SONAME QGenderSelector SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR})
-endif(UNIX AND QGenderSelector_BUILD_SHARED_LIBS)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QGenderSelector_Export.h DESTINATION include)
-install(TARGETS QGenderSelector DESTINATION ARCHIVE DESTINATION lib
-                                            LIBRARY DESTINATION lib
-                                            RUNTIME DESTINATION bin)
-install(FILES ${QGenderSelector_MOC_HDRS} DESTINATION include/)
+if(NOT QGenderSelector_ENABLE_QT4 AND NOT QGenderSelector_ENABLE_QT5)
+    message(ERROR "You need to enable at least one of Qt4/5!")
+endif(NOT QGenderSelector_ENABLE_QT4 AND NOT QGenderSelector_ENABLE_QT5)
 
+if(QGenderSelector_ENABLE_QT4)
+    add_subdirectory(QGenderSelector4)
+endif(QGenderSelector_ENABLE_QT4)
+if(QGenderSelector_ENABLE_QT5)
+    add_subdirectory(QGenderSelector5)
+endif(QGenderSelector_ENABLE_QT5)
 
-#
-# Qt designer plugin
-if(QGenderSelector_WITH_DESIGNER_PLUGIN)
-  add_definitions(${QT_DEFINITIONS})
-  add_definitions(-DQT_PLUGIN)
-  add_definitions(-DQT_SHARED)
-  if(WIN32)
-    add_definitions(-DQT_DLL)
-  endif(WIN32)
-  set(libQGenderSelectorPlugin_MOC_HDRS QGenderSelectorDesignerFactory.h)
-  set(libQGenderSelectorPlugin_SRCS QGenderSelectorDesignerFactory.cc)
-  qt4_wrap_cpp(libQGenderSelectorPlugin_MOC_SRCS ${libQGenderSelectorPlugin_MOC_HDRS})
-  add_library(QGenderSelectorPlugin SHARED ${libQGenderSelectorPlugin_MOC_SRCS} ${libQGenderSelectorPlugin_SRCS})
-  target_link_libraries(QGenderSelectorPlugin QGenderSelector ${QT_LIBRARIES})
-  if(QGenderSelector_INSTALL_DESIGNER_PLUGIN)
-    install(TARGETS QGenderSelectorPlugin DESTINATION ${QT_DIR}/plugins)
-  else(QGenderSelector_INSTALL_DESIGNER_PLUGIN)
-    install(TARGETS QGenderSelectorPlugin ARCHIVE DESTINATION lib
-                                          LIBRARY DESTINATION lib
-                                          RUNTIME DESTINATION bin)
-  endif(QGenderSelector_INSTALL_DESIGNER_PLUGIN)
-endif(QGenderSelector_WITH_DESIGNER_PLUGIN)
-
-
-#
-# Simple demo executable
-if(QGenderSelector_WITH_EXAMPLE)
-    add_executable(QGenderSelector-demo demo.cc)
-    target_link_libraries(QGenderSelector-demo QGenderSelector)
-    target_link_libraries(QGenderSelector-demo ${QT_LIBRARIES})
-endif(QGenderSelector_WITH_EXAMPLE)

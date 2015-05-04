@@ -16,6 +16,9 @@ class QGenderSelectorDesignerFactory : public QObject,
                                        public QDesignerCustomWidgetInterface {
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
+#if (QT_VERSION >= 0x050000)
+    Q_PLUGIN_METADATA(IID "de.das-system-networks.QGenderSelector.DesignerPlugin")
+#endif
 public:
     explicit QGenderSelectorDesignerFactory(QObject* parent = 0);
 
